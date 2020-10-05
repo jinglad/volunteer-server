@@ -14,14 +14,14 @@ let client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: t
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+    res.send('welcome back')
+})
+
 
 client.connect(err => {
     let eventsCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLL_1);
     let volunteersCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLL_2);
-
-    app.get('/', (req, res) => {
-        res.send('welcome back')
-    })
 
     app.post('/addEvent', (req, res) => {
         let event = req.body;
