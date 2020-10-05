@@ -1,30 +1,30 @@
-const express = require('express');
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const MongoClient = require("mongodb").MongoClient;
-const ObjectId = require("mongodb").ObjectId;
+let express = require('express');
+let cors = require("cors");
+let bodyParser = require("body-parser");
+let MongoClient = require("mongodb").MongoClient;
+let ObjectId = require("mongodb").ObjectId;
 require('dotenv').config();
 
-const app = express();
+let app = express();
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vpsgc.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+let uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vpsgc.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+let client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(cors());
 app.use(bodyParser.json());
 
 
 client.connect(err => {
-    const eventsCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLL_1);
-    const volunteersCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLL_2);
+    let eventsCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLL_1);
+    let volunteersCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLL_2);
 
     app.get('/', (req, res) => {
         res.send('welcome back')
     })
 
     app.post('/addEvent', (req, res) => {
-        const event = req.body;
+        let event = req.body;
         eventsCollection.insertMany(event)
             .then(result => {
                 console.log(result.insertedCount);
@@ -40,7 +40,7 @@ client.connect(err => {
     })
 
     app.post('/addVolunteer', (req, res) => {
-        const volunteer = req.body;
+        let volunteer = req.body;
         volunteersCollection.insertOne(volunteer)
             .then(result => {
                 res.send(result.insertedCount > 0);
@@ -69,6 +69,6 @@ client.connect(err => {
     })
 });
 
-const PORT = process.env.PORT || 5000;
+let PORT = process.env.PORT || 5000;
 
 app.listen(PORT);
